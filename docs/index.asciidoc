@@ -1,0 +1,168 @@
+:plugin: java_stacktrace_parser
+:type: filter
+// Update header with plugin name
+
+///////////////////////////////////////////
+START - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+:version: %VERSION%
+:release_date: %RELEASE_DATE%
+:changelog_url: %CHANGELOG_URL%
+:include_path: ../../../../logstash/docs/include
+///////////////////////////////////////////
+END - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+
+[id="plugins-{type}s-{plugin}"]
+
+=== Java_stacktrace_parser
+
+include::{include_path}/plugin_header.asciidoc[]
+
+==== Description
+
+Plugin parses java stack trace and add 6 new fields to event. The filed names are:
+
+ * exception_classes
+ * exception_messages
+ * java_classes
+ * methods
+ * source_files
+ * line_numbers
+
+
+// Format anchors and links to support generated ids for versioning
+// Sample anchor: [id="plugins-{type}s-{plugin}-setting_name"]
+// Sample link: <<plugins-{type}s-{plugin}-setting_name>>
+
+[id="plugins-{type}s-{plugin}-options"]
+==== Java_stacktrace_parser filter Configuration Options
+
+[cols="<,<,<",options="header",]
+|=======================================================================
+|Setting |Input type|Required
+| <<plugins-{type}s-{plugin}-source_field>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-output_pattern>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-remove_source_filed>> |<<boolean,boolean>>|No
+| <<plugins-{type}s-{plugin}-exception_pattern>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-trace_pattern>> |<<string,string>>|No
+| <<plugins-{type}s-{plugin}-exception_type_groups>> |<<array,array>>|No
+| <<plugins-{type}s-{plugin}-exception_message_groups>> |<<array,array>>|No
+| <<plugins-{type}s-{plugin}-java_class_group>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-method_group>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-source_file_group>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-line_number_group>> |<<number,number>>|No
+|=======================================================================
+
+[id="plugins-{type}s-{plugin}-source_field"]
+===== 'source_field' 
+
+  * Value type is <<string,string>>
+  * Default value is 'full_stack_trace'
+
+Filed name which contains java stack trace
+
+[id="plugins-{type}s-{plugin}-output_pattern"]
+===== 'output_pattern' 
+
+  * Value type is <<string,string>>
+  * Default value is 'csv'
+
+Parsed values for each field can be represented as a string of comma separated values or as array. 
+For example,  default configuration will have setting
+
+{output_pattern => "csv"}
+
+and exception_classes will look like this:
+
+{exception_classes => "com.salesorder.UnexpectedBusinessException,java.lang.IllegalStateException"}
+
+
+If configuration has 
+
+{output_pattern => "array"} 
+
+the same field will look like this
+
+{exception_classes => ["com.salesorder.UnexpectedBusinessException","java.lang.IllegalStateException"]}
+
+[id="plugins-{type}s-{plugin}-remove_source_filed"]
+===== 'remove_source_filed' 
+
+  * Value type is <<boolean,boolean>>
+  * Default value is 'true'
+
+Default configuration will remove source field from event, otherwise it will be kept
+
+[id="plugins-{type}s-{plugin}-exception_pattern"]
+===== 'exception_pattern' 
+
+  * Value type is <<string,string>>
+  * Default value is '((\\w[\\w\\.]+): (.*)?)|(Caused by: (\\w[\\w\\.]+): (.*)?)'
+
+Regular expression to find values of exception_classes and exception_messages fields
+
+
+[id="plugins-{type}s-{plugin}-trace_pattern"]
+===== 'trace_pattern' 
+
+  * Value type is <<string,string>>
+  * Default value is '\\s+at\\s+([\\w\\.$]+)\\.([\\w$]+)\\((.*java)?:(\\d+)\\)(\\s{1,2}|$)'
+
+Regular expression to find values of java_classes, methods, source_files and line_numbers fields
+
+
+[id="plugins-{type}s-{plugin}-exception_type_groups"]
+===== 'exception_type_groups' 
+
+  * Value type is <<array,array>>
+  * Default value is '[2, 5]'
+
+Groups in [exception_pattern] matched to [exception_classes] field
+
+[id="plugins-{type}s-{plugin}-exception_message_groups"]
+===== 'exception_message_groups' 
+
+  * Value type is <<array,array>>
+  * Default value is 'Default value is '[3, 6]
+
+Groups in [exception_pattern] matched to [exception_messages] field
+
+[id="plugins-{type}s-{plugin}-java_class_group"]
+===== 'java_class_group' 
+
+  * Value type is <<number,number>>
+  * Default value is 1
+
+Group in [trace_pattern] matched to [java_classes] field
+
+[id="plugins-{type}s-{plugin}-method_group"]
+===== 'method_group' 
+
+  * Value type is <<number,number>>
+  * Default value is 2
+
+Group in [trace_pattern] matched to [java_classes] field
+
+[id="plugins-{type}s-{plugin}-source_file_group"]
+===== 'source_file_group' 
+
+  * Value type is <<number,number>>
+  * Default value is 3
+
+Group in [trace_pattern] matched to [java_classes] field
+
+[id="plugins-{type}s-{plugin}-line_number_group"]
+===== 'line_number_group' 
+
+  * Value type is <<number,number>>
+  * Default value is 4 
+
+Group in [trace_pattern] matched to [java_classes] field
+
+
+// The full list of Value Types is here: 
+// https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html
+
+[id="plugins-{type}s-{plugin}-common-options"]
+include::{include_path}/{type}.asciidoc[]
